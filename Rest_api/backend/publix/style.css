@@ -1,0 +1,21 @@
+h1{
+    background-color: #458912  ;
+    color: #904012;
+}
+
+.username{
+    font-style: italic;
+    background-color: #458912;
+    opacity: 0.5;
+    display: inline;
+   
+}
+
+.content{
+    color: chocolate;
+    display: block;
+}
+
+.id{
+    color: bisque;
+}
