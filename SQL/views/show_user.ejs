@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database table</title>
+    <style>
+        table, th, td{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>email</th>
+            <th>username</th>
+        </tr>
+        <% for(res of result){ %>
+        <tr>
+            <td><%= res.id %></td>
+            <td><%= res.username %></td>
+            <td><%= res.email %></td>
+        </tr>
+<% } %>
+    </table>
+</body>
+</html>
+
