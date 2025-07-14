@@ -40,13 +40,28 @@ app.post("/kidney",(req,res) => {
     })
 });
 
-app.put("/kidney",(res,req) => {
+app.put("/kidney",(req,res) => {
     for(let i = 0;i < users[0].kidney.length;i++){
         users[0].kidney[i] = true;
     }
     res.json({});
 })
 
+
+app.delete("/kidney",(req,res) => {
+    const newKidney = [];
+    for(let i = 0;i < users[0].kidney.length;i++){
+        if (users[0].kidney[i].healthy){
+            newKidney.push({
+                healthy: true
+            })
+        }
+    }
+    users[0].kidney = newKidney;
+    res.json({
+        msg : "Done with delete"
+    })
+})
 app.listen(8080,() => {
     console.log("listening to port 8080");
 });
