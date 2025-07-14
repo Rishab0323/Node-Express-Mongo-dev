@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded());
+
 const users =[{
     name : "jhon cena",
     kidney: [{
@@ -25,6 +28,24 @@ app.get("/",(req,res) => {
         numberOfUnhealthyKidney,
     });
 });
+
+app.post("/kidney",(req,res) => {
+    const newKidney = req.body.newKidney;
+    users[0].kidney.push({
+        healthy:newKidney
+    })
+    console.log("update user",users[0].kidney);
+    res.json({
+        msg:"Done !"
+    })
+});
+
+app.put("/kidney",(res,req) => {
+    for(let i = 0;i < users[0].kidney.length;i++){
+        users[0].kidney[i] = true;
+    }
+    res.json({});
+})
 
 app.listen(8080,() => {
     console.log("listening to port 8080");
