@@ -3,6 +3,8 @@ const app = express();
 const mongoose = require("mongoose");
 const path = require("path");
 const chat = require("./model/chat.js");
+
+app.use(express.urlencoded({extended:true}));
 app.set("views",path.join(__dirname,"views"));
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,"public")));
@@ -51,7 +53,9 @@ app.post("/chats",(req,res) => {
         msg: msg,
         created_at: new Date()
     });
+    console.log("this is the new",newChat);
     newChat.save().then((res) => {
+        console.log(res);
         console.log("chat was added");
     })
     .catch((err) => {
@@ -60,10 +64,6 @@ app.post("/chats",(req,res) => {
     res.redirect("/chats");
 });
 
-
-app.get("/", (req,res) => {
-    res.send("sever is ON");
-});
 
 app.listen(3000, () => {
     console.log("listening to port 3000");
