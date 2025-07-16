@@ -71,7 +71,6 @@ app.get("/chats/:id/edit", async (req,res) => {
     let chit = await chat.findById(id);
     res.render("edit.ejs",{chit});
     
-
 })
 
 
@@ -87,6 +86,13 @@ app.get("/chat/:id",async (req,res) => {
 
     console.log(updatedChat);
     res.redirect("chats");
+});
+
+app.delete("/chat/:id", async(req,res) =>{
+    let {id} = req.params;
+    let chatDeleted = await chat.findByIdAndDelete(id);
+    console.log( chatDeleted +"chat is deleted");
+    res.redirect("/chats");
 })
 
 
