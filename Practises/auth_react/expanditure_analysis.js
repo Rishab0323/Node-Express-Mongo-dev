@@ -33,14 +33,14 @@ function calculateTotalSpentByCategory(transactions) {
   // }
   // return totalspent1
   console.log(transactions);
-  const total = {};
+  const totals = {};
   transactions.forEach((transaction) =>  {
     const {category,price} = transaction;
     if(!totals[category]){
-      total[category] = price;
+      totals[category] = price;
     }
     else{
-      total[category] += price
+      totals[category] += price
     }
   });
 
