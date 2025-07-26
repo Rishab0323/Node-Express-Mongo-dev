@@ -44,6 +44,44 @@
   
   const app = express();
   
+  app.use(express.json());
   app.use(bodyParser.json());
+
+  let arr = [
+    {
+      id : 1,
+      task: "complete MERN stack",
+      name: "mukesh"
+    },
+    {
+      id : 2,
+      task: "do dsa",
+      name: "codemonk"
+    },{
+      id : 3,
+      task: "complete springboot",
+      name: "coder"
+    },{
+      id : 4,
+      task: "complete the project",
+      name: "sachin"
+    },{
+      id : 5,
+      task: "complete 30 pushups",
+      name: "milkha"
+    }
+  ]
   
+app.get("/todo",(req,res) => {
+  res.send("sever is loading  data");
+})
+app.get("/todo/:id", (req,res) => {
+  let id = req.query;
+  console.log(id);
+  res.send(id);
+});
+
+app.listen(8080, () => {
+  console.log("listening to port 8080");
+});
   module.exports = app;
