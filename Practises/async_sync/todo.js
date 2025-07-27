@@ -74,11 +74,23 @@
   
 app.get("/todo",(req,res) => {
   res.send("sever is loading  data");
-})
+  res.json(arr);
+});
+
 app.get("/todo/:id", (req,res) => {
-  let id = req.query;
+  let id = req.params.id;
   console.log(id);
-  res.send(id);
+  for(let i=0;i<arr.length;i++){
+    if(arr[i]["id"] == id){
+      res.send("array id is ",arr[i]["id"],arr[i]["name"]);
+      res.json({
+        msg : "here the detail",
+        task : arr[i]["task"]
+      });
+      res.send("detail received");
+    }
+  }
+
 });
 
 app.listen(8080, () => {
