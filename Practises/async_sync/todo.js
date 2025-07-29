@@ -45,6 +45,7 @@
   const app = express();
   
   app.use(express.json());
+  app.use(express.urlencoded({extended:false}));
   app.use(bodyParser.json());
 
   let arr = [
@@ -73,27 +74,57 @@
   ]
   
 app.get("/todo",(req,res) => {
-  res.send("sever is loading  data");
+  // res.send("sever is loading  data");
   res.json(arr);
 });
 
-app.get("/todo/:id", (req,res) => {
+app.delete("/todo/:id", (req,res) => {
   let id = req.params.id;
-  console.log(id);
-  for(let i=0;i<arr.length;i++){
-    if(arr[i]["id"] == id){
-      res.send("array id is ",arr[i]["id"],arr[i]["name"]);
-      res.json({
-        msg : "here the detail",
-        task : arr[i]["task"]
-      });
-      res.send("detail received");
+  let tododata = arr;
+  const index = findIndexById(tododata,id);
+  if(index === -1){
+    res.status(404).send("errror");
+  }
+  else{
+    tododata = removedataAtIndex(tododata,index);
+  }
+  
+});
+
+function removedataAtIndex(array,index){
+  let newArray = [];
+  for(let i=0;i<array.length;i++){
+    if(i !== index){
+      newArray.push(array[i]);
     }
   }
+}
 
+app.post("/todo",(req,res) => {
+  let adduser = req.body;
+  console.log(adduser);
+  arr.push(adduser);
+  res.send(arr);
+  
 });
+
+
+
+// app.delete("/del/:id",(req,res) => {
+//   const did = req.params;
+//   for(let i=1;i<arr.length;i++){
+//     console.log(did);
+//     if(arr[i]["id"] == did){
+//       console.log(arr[did]);
+//       arr.pop(arr[did]);
+//       res.status(201).send("deleted successfully");
+//     }  
+//   }
+// });
+
 
 app.listen(8080, () => {
   console.log("listening to port 8080");
 });
-  module.exports = app;
+  
+module.exports = app;
