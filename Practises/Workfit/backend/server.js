@@ -3,6 +3,11 @@ const app = express();
 
 require('dotenv').config();
 
+app.use((req,res,next) => {
+    console.log(req.path , req.method);
+    next();
+})
+
 
 app.get("/", (req,res) => {
     res.json({msg : "welcome to the app"});
