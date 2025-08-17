@@ -1,4 +1,5 @@
 const Workout = require("../Models/workoutModel");
+const mongoose = require("mongoose");
 
 //get all workout
 const getWorkout = async (req,res) => {
@@ -59,18 +60,20 @@ const updateWorkout = async(req,res) => {
         return res.status(404).json({error : "no such workout"});
     }
     
-    const workout = Workout.findOneAndUpdate({_id: id},{
+    const workout = await Workout.findOneAndUpdate({_id: id},{
         ...req.body
     })
 
       if(!workout){
         return res.status(404).json({error : "workout not found"});
     }
+    res.status(200).json(workout);
 }
 
 module.exports = {
     createWorkout,
     getWorkout,
     singleWorkout,
-    deleteWorkout
+    deleteWorkout,
+    updateWorkout
 };
