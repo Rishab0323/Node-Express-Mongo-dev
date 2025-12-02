@@ -19,4 +19,45 @@ router.post("/signup" ,(req ,res) => {
     })
 })
 
+router.get("/courses",(req,res) => {
+    Course.find({})
+    .then((value) => {
+        res.json({Course : value});
+    })
+    .catch((err) => {
+        res.json(err);
+    })
+})
+
+router.post("/courses/:courseId",userMiddleware, async(req,res) => {
+    const courseId = req.params.courseId;
+    const username = req.headers.username;
+
+    
+    await User.updateOne({
+        username : username
+    },
+        {
+        "$push": {
+            purchasedCourses : courseId
+        }
+    })
+    res.json({
+        msg : "Purchase complete!"
+    })
+});
+
+router.get("/purchasedCourses",userMiddleware,(req,res) => {
+    const user = await User.findOne({
+        username : req.header.username;
+    });
+
+    const courses = await Course.find({
+        _id:{
+            "$in":user.purchasedCourses
+        }
+    });
+    res.json({course : courses})
+})
+
 module.exports = router;
