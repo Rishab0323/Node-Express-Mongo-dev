@@ -39,12 +39,13 @@ router.post("/courses/:courseId",userMiddleware, async(req,res) => {
     },
         {
         "$push": {
-            purchasedCourses : courseId
+            coursePurchased : courseId
         }
     })
     res.json({
-        msg : "Purchase complete!"
+        msg : "Purchase completed!"
     })
+    
 });
 
 router.get("/purchasedCourses",userMiddleware,async (req,res) => {
