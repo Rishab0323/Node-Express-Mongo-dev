@@ -32,10 +32,10 @@ router.get("/courses",(req,res) => {
 router.post("/courses/:courseId",userMiddleware, async(req,res) => {
     const courseId = req.params.courseId;
     const username = req.headers.username;
+    console.log("hi ",username);
 
-    
     await User.updateOne({
-        username : username
+        username : username  
     },
         {
         "$push": {
@@ -47,11 +47,11 @@ router.post("/courses/:courseId",userMiddleware, async(req,res) => {
     })
 });
 
-router.get("/purchasedCourses",userMiddleware,(req,res) => {
+router.get("/purchasedCourses",userMiddleware,async (req,res) => {
     const user = await User.findOne({
-        username : req.header.username;
+        username : req.header.username
     });
-
+    console.log("hi ",username);
     const courses = await Course.find({
         _id:{
             "$in":user.purchasedCourses

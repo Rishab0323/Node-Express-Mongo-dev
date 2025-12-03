@@ -21,4 +21,4 @@ function userMiddleware(req,res,next){
     })
 }
 
-module.export = userMiddleware;
+module.exports = userMiddleware;
