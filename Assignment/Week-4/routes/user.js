@@ -50,12 +50,12 @@ router.post("/courses/:courseId",userMiddleware, async(req,res) => {
 
 router.get("/purchasedCourses",userMiddleware,async (req,res) => {
     const user = await User.findOne({
-        username : req.header.username
+        username : req.headers.username
     });
-    console.log("hi ",username);
+    
     const courses = await Course.find({
         _id:{
-            "$in":user.purchasedCourses
+            "$in": user.purchasedCourses
         }
     });
     res.json({course : courses})
