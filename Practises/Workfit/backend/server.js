@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json())
+
 const WorkoutRouter = require("./router/workouts");
  
 const mongoose = require("mongoose");
