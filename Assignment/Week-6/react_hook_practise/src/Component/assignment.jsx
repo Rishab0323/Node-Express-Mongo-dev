@@ -1,12 +1,17 @@
-import { useState } from "react"; 
+import { useMemo, useState } from "react"; 
 
 function Assignment1(){
-    const [input,setInput] = useState(0);
+    const [input,setInput] = useState();
 
-    let expensiveValue = 1;
-    for(let i=0;i<=input;i++){
+    const expensiveValue = useMemo(() => {
+        let expensiveValue = 1;
+    for(let i=1;i<=input;i++){
         expensiveValue = i * expensiveValue;
     }
+    return value;
+    },[input ])
+
+    
 
 
     return (
