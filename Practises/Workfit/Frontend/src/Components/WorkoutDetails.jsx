@@ -7,11 +7,12 @@ const WorkoutDetails = ({workout}) => {
 
     const handleClick = async () => {
         const response = await fetch('/api/fit/' +workout._id,{
-            method : 'DELETE',
+            method:'DELETE',
         });
         const json = await response.json()
 
         if(response.ok){
+            
             dispatch({type: 'DELETE_WORKOUT',payload:json})
         }
     }

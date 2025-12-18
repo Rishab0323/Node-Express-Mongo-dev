@@ -50,11 +50,11 @@ const WorkoutForm = () =>{
             value={title} className={emptyFields.includes('title') ? 'error' : ' '}/>
 
             <label >Load (in kg):</label>
-            <input type="number" onChange={(e) => setLoad(e.target.value)}
+            <input type="number" onChange={(e) => setLoad(Number(e.target.value))}
             value={load} className={emptyFields.includes('load') ? 'error' : ' '}/>
 
             <label >Reps :</label>
-            <input type="number" onChange={(e) => setReps(e.target.value)}
+            <input type="number" onChange={(e) => setReps(Number(e.target.value))}
             value={reps} className={emptyFields.includes('reps') ? 'error' : ' '}/>
             <button>Add Workout</button>
                                      {/* ////check the error state which is not used then go ahead */}
