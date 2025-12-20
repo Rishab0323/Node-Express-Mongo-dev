@@ -18,7 +18,9 @@ export default function Assignment2(){
     const [sentence,setSentence] = useState(ALL_WORDS);
     const [filter,setFilter] = useState();
 
-    const filteredSentence = sentence.filter(c => x.includes(filter));
+    const filteredSentence = useMemo(() => {
+        sentence.filter(x => x.includes(filter));
+    },[sentence,setSentence]); 
 
     return(
         <>
