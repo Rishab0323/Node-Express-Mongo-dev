@@ -9,6 +9,7 @@ export const Assignment3 = () =>{
     ]);
 
     let totalValue = useMemo(() => {
+        let totalValue = 0;
         for(let i=0;i<items.length;i++){
             totalValue = totalValue+ items[i].value;
         }

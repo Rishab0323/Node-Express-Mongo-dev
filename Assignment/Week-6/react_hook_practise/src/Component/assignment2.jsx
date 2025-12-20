@@ -5,7 +5,7 @@ const TOTAL_LINES = 1000;
 const ALL_WORDS = [];
 for(let i=0;i<TOTAL_LINES;i++){
     let sentences = "";
-    for(j=0;j< words.length;j++){
+    for(let j=0;j< words.length;j++){
         sentences += (words[Math.floor(words.length * Math.random())])
         sentences += ""
     }
