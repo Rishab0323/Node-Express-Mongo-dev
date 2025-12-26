@@ -11,7 +11,7 @@ for(let i=0;i<TOTAL_LINES;i++){
     }
     ALL_WORDS.push(sentences);
 }
-
+ 
 
 
 export default function Assignment2(){
