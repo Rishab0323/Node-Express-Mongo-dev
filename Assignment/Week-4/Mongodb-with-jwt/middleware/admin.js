@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 
-function adminMiddlewares(req,res,next){
+function adminMiddleware(req,res,next){
     const token = req.headers.authorization;
     const words =token.split(" ");
     const jwtToken = word[1];
@@ -13,3 +13,5 @@ function adminMiddlewares(req,res,next){
     }
 
 }
+
+module.exports = adminMiddleware;
