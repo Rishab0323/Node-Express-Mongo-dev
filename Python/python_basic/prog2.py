@@ -1,10 +1,10 @@
 #loop 
-# num = int(input("enter any number "))
-# while (num < 10):
-#     print(num)
-#     num = num + 1
+num = int(input("enter any number "))
+while (num < 10):
+    print(num)
+    num = num + 1
 
-# print("num val is ",num)
+print("num val is ",num)
 
 #for loop
 arr = [1,2,4,5,7,8]
