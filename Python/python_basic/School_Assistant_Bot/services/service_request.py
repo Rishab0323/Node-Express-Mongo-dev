@@ -5,7 +5,10 @@ model = None
 
 def load_model():
     global model
-    model = SentenceTransformer("all-MiniLM-L6-v2")
+    if model is None:
+        print("loading model...")
+        model = SentenceTransformer("all-MiniLM-L6-v2")
+        print("model loaded")
 
 def generate_embedding(text: str):
     if model is None:

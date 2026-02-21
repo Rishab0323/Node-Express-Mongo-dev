@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,HTTPException
 import uvicorn
+from fastapi.responses import JSONResponse
 from services.service_request import load_model, generate_embedding
 from model.model_schema import EmbeddingRequest
 
@@ -44,9 +45,11 @@ def get_student(student_id: int):
 
     return students[student_id]
 
-@app.on_event("startup")
-def startup_event():
+
+@app.event("startup")
+async def startup_event():
     load_model()
+
 
 @app.post("/embedding")
 def get_embedding(request: EmbeddingRequest):
@@ -54,7 +57,7 @@ def get_embedding(request: EmbeddingRequest):
         embedding = generate_embedding(request.text)
         return {"embedding": embedding}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException({"message":"failed to generate embedding"}status_code=500, detail=str(e))
     
 
 if __name__ == "__main__":
