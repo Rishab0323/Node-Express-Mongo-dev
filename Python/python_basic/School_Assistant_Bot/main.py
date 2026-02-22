@@ -1,7 +1,11 @@
 from fastapi import FastAPI,HTTPException
 import uvicorn
 from fastapi.responses import JSONResponse
-from services.service_request import load_model, generate_embedding
+from services.service_request import (
+    load_model,
+    initialize_knowledge_base,
+    find_most_similar
+)
 from model.model_schema import EmbeddingRequest
 
 app = FastAPI()
@@ -57,8 +61,19 @@ def get_embedding(request: EmbeddingRequest):
         embedding = generate_embedding(request.text)
         return {"embedding": embedding}
     except Exception as e:
-        raise HTTPException({"message":"failed to generate embedding"}status_code=500, detail=str(e))
+        raise HTTPException({"message":"failed to generate embedding"},status_code=500, detail=str(e))
     
+#ask query to model
+@app.post("/ask")
+def ask(request: EmbeddingRequest):
+    answer, similarity_score = find_most_similar(request.text)
+
+    return {
+        "question": request.text,
+        "answer": answer,
+        "similarity_score": similarity_score
+    }
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app")
