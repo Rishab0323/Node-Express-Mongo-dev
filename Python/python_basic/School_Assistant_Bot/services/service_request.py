@@ -19,25 +19,30 @@ def load_model():
         model = SentenceTransformer("all-MiniLM-L6-v2")
         print("model loaded successfully.")
 
-def intialize_knowledge_base():
+def initialize_knowledge_base():
     global knowledge_embeddings
     if model is None:
         raise ValueError("Model not loaded")
-    knowledge_embeddings = model.encode(knowledge_base)
+    embeddings = model.encode(knowledge_base)
 
     ##cosine similarity
-    norms = np.linalg.norm(knowledge_embeddings, axis=1, keepdims=True)
-    knowledge_embeddings = knowledge_embeddings / norms
+    norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+    knowledge_embeddings = embeddings / norms
 
     print("knowledge base initialized successfully.")
 
 
 def find_most_similar(text: str):
-    """
-    Find most similar knowledge text using cosine similarity.
-    """
+    ##Find most similar knowledge text using cosine similarity.
+    
     global knowledge_embeddings, model
+    if model is None:
+        raise ValueError("System not initialized ....")
     query_embedding = model.encode(text)
+
+    norm = np.linalg.norm(query_embedding)
+    if norm == 0:
+        raise ValueError("Query text is empty.")
     
     # Normalize query embedding
     query_embedding = query_embedding / np.linalg.norm(query_embedding)

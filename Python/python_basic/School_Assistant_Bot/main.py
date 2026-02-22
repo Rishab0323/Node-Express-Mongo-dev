@@ -4,8 +4,11 @@ from fastapi.responses import JSONResponse
 from services.service_request import (
     load_model,
     initialize_knowledge_base,
-    find_most_similar
+    find_most_similar,
+    generate_embedding
 )
+
+
 from model.model_schema import EmbeddingRequest
 
 app = FastAPI()
@@ -50,9 +53,10 @@ def get_student(student_id: int):
     return students[student_id]
 
 
-@app.event("startup")
+@app.on_event("startup")
 async def startup_event():
     load_model()
+    initialize_knowledge_base()
 
 
 @app.post("/embedding")
@@ -61,7 +65,7 @@ def get_embedding(request: EmbeddingRequest):
         embedding = generate_embedding(request.text)
         return {"embedding": embedding}
     except Exception as e:
-        raise HTTPException({"message":"failed to generate embedding"},status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="failed to generate embedding")
     
 #ask query to model
 @app.post("/ask")
