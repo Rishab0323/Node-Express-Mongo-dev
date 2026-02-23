@@ -1,8 +1,10 @@
 import numpy as np
+import faiss
 from sentence_transformers import SentenceTransformer
 
 # Global model variable
 model = None
+faiss_index = None
 
 knowledge_base = [
     "School timings are from 8am to 3pm.",
@@ -20,37 +22,49 @@ def load_model():
         print("model loaded successfully.")
 
 def initialize_knowledge_base():
-    global knowledge_embeddings
+    global knowledge_embeddings, faiss_index
+
     if model is None:
         raise ValueError("Model not loaded")
-    embeddings = model.encode(knowledge_base)
 
-    ##cosine similarity
-    norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
-    knowledge_embeddings = embeddings / norms
+    # Generate embedding
+    knowledge_embeddings = model.encode(knowledge_base)
 
-    print("knowledge base initialized successfully.")
+    knowledge_embeddings = np.array(knowledge_embeddings).astype("float32")
+    faiss.normalize_L2(knowledge_embeddings)
+
+    #embedding dimension
+    dimension = knowledge_embeddings.shape[1]
+
+    # Create FAISS index
+    faiss_index = faiss.IndexFlatIP(dimension)
+    faiss_index.add(knowledge_embeddings)
+
+    print("FAISS index initialized successfully.")
 
 
-def find_most_similar(text: str,threshold : float =0.5):
-    ##Find most similar knowledge text using cosine similarity.
-    global knowledge_embeddings,model
-    if model is None:
-        raise ValueError("Model not loaded")
-    query_embedding = model.encode(text)
-    norm = np.linalg.norm(query_embedding)
+def find_most_similar(text: str, threshold: float = 0.5):
+    global faiss_index, model
 
-    if norm == 0:
-        raise ValueError("Query text is empty.")
-    query_embedding = query_embedding / norm
+    if model is None or faiss_index is None:
+        raise ValueError("System not initialized properly")
 
-    similarities = np.dot(knowledge_embeddings, query_embedding)
+    if not text.strip():
+        raise ValueError("Query text cannot be empty")
 
-    top_index = np.argmax(similarities)
-    top_score = float(similarities[top_index])
+    query_embedding = model.encode([text])
+    query_embedding = np.array(query_embedding).astype("float32")
+
+    # Normalize query
+    faiss.normalize_L2(query_embedding)
+
+    scores, indices = faiss_index.search(query_embedding, k=1)
+    top_score = float(scores[0][0])
+    top_index = int(indices[0][0])
 
     if top_score < threshold:
-        return "Sorry i dont have answer to your question", top_score
+        return "Sorry, I don't have information about that.", top_score
+
     return knowledge_base[top_index], top_score
 
 
