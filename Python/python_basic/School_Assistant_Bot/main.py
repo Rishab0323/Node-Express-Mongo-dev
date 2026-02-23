@@ -70,13 +70,16 @@ def get_embedding(request: EmbeddingRequest):
 #ask query to model
 @app.post("/ask")
 def ask(request: EmbeddingRequest):
-    answer, similarity_score = find_most_similar(request.text)
+    try:
+        answer, similarity_score = find_most_similar(request.text)
 
-    return {
+        return {
         "question": request.text,
         "answer": answer,
         "similarity_score": similarity_score
-    }
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="failed to process query")
 
 
 if __name__ == "__main__":

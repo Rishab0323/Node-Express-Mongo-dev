@@ -32,25 +32,26 @@ def initialize_knowledge_base():
     print("knowledge base initialized successfully.")
 
 
-def find_most_similar(text: str):
+def find_most_similar(text: str,threshold : float =0.5):
     ##Find most similar knowledge text using cosine similarity.
-    
-    global knowledge_embeddings, model
+    global knowledge_embeddings,model
     if model is None:
-        raise ValueError("System not initialized ....")
+        raise ValueError("Model not loaded")
     query_embedding = model.encode(text)
-
     norm = np.linalg.norm(query_embedding)
+
     if norm == 0:
         raise ValueError("Query text is empty.")
-    
-    # Normalize query embedding
-    query_embedding = query_embedding / np.linalg.norm(query_embedding)
+    query_embedding = query_embedding / norm
 
-    # Compute cosine similarity
     similarities = np.dot(knowledge_embeddings, query_embedding)
+
     top_index = np.argmax(similarities)
-    return knowledge_base[top_index], float(similarities[top_index])
+    top_score = float(similarities[top_index])
+
+    if top_score < threshold:
+        return "Sorry i dont have answer to your question", top_score
+    return knowledge_base[top_index], top_score
 
 
 def generate_embedding(text: str):
