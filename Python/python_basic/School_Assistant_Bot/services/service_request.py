@@ -5,12 +5,8 @@ from sentence_transformers import SentenceTransformer
 # Global model variable
 model = None
 faiss_index = None
+knowledge_text = []
 
-knowledge_base = [
-    "School timings are from 8am to 3pm.",
-    "Library rules include no food, no loud talking, and no damage to books.",
-    "Exam rules include no cheating, no leaving the room, and no talking.",
-]
 
 knowledge_embeddings = None
 
@@ -22,13 +18,19 @@ def load_model():
         print("model loaded successfully.")
 
 def initialize_knowledge_base():
-    global knowledge_embeddings, faiss_index
+    global knowledge_text, faiss_index
+
+    knowledge_text = [
+    "School timings are from 8am to 3pm.",
+    "Library rules include no food, no loud talking, and no damage to books.",
+    "Exam rules include no cheating, no leaving the room, and no talking.",
+    ]
 
     if model is None:
         raise ValueError("Model not loaded")
 
     # Generate embedding
-    knowledge_embeddings = model.encode(knowledge_base)
+    knowledge_embeddings = model.encode(knowledge_text)
 
     knowledge_embeddings = np.array(knowledge_embeddings).astype("float32")
     faiss.normalize_L2(knowledge_embeddings)
@@ -63,9 +65,16 @@ def find_most_similar(text: str, threshold: float = 0.5):
     top_index = int(indices[0][0])
 
     if top_score < threshold:
-        return "Sorry, I don't have information about that.", top_score
+        return {
+            "answer" :"Sorry, I don't have information about that.",
+            "similarity_search" : top_score
+        }
 
-    return knowledge_base[top_index], top_score
+    return {
+        "anser" :knowledge_text[top_index], 
+        "similarity_score" :top_score
+    }
+
 
 
 def generate_embedding(text: str):

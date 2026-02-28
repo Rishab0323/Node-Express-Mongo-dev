@@ -1,5 +1,6 @@
 from fastapi import FastAPI,HTTPException
 import uvicorn
+import numpy as np
 from fastapi.responses import JSONResponse
 from services.service_request import (
     load_model,
@@ -71,13 +72,14 @@ def get_embedding(request: EmbeddingRequest):
 @app.post("/ask")
 def ask(request: EmbeddingRequest):
     try:
-        answer, similarity_score = find_most_similar(request.text)
-
+        result = find_most_similar(request.text)
+    
         return {
-        "question": request.text,
-        "answer": answer,
-        "similarity_score": similarity_score
+        "question" : request.text,
+        "answer" : result["answer"],
+        "similarity_score" : result["similarity_score"]
         }
+
     except Exception as e:
         raise HTTPException(status_code=500, detail="failed to process query")
 
