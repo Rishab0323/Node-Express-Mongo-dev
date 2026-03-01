@@ -72,12 +72,12 @@ def get_embedding(request: EmbeddingRequest):
 @app.post("/ask")
 def ask(request: EmbeddingRequest):
     try:
-        result = find_most_similar(request.text)
+        answer, similarity_score = find_most_similar(request.text)
     
         return {
         "question" : request.text,
-        "answer" : result["answer"],
-        "similarity_score" : result["similarity_score"]
+        "answer" : answer,
+        "similarity_score" : similarity_score
         }
 
     except Exception as e:
