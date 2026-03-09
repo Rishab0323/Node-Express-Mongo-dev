@@ -46,7 +46,7 @@ def initialize_knowledge_base():
 
 
 def find_most_similar(text: str, threshold: float = 0.5):
-    global faiss_index, model
+    global faiss_index, model,knowledge_text
 
     if model is None or faiss_index is None:
         raise ValueError("System not initialized properly")
@@ -67,11 +67,11 @@ def find_most_similar(text: str, threshold: float = 0.5):
     if top_score < threshold:
         return {
             "answer" :"Sorry, I don't have information about that.",
-            "similarity_search" : top_score
+            "similarity_score" : top_score
         }
 
     return {
-        "anser" :knowledge_text[top_index], 
+        "answer" :knowledge_text[top_index], 
         "similarity_score" :top_score
     }
 
