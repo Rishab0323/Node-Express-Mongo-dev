@@ -9,6 +9,11 @@ from services.service_request import (
     generate_embedding
 )
 
+from services.llm_services import (
+    load_llm,
+    generate_answer
+)
+
 
 from model.model_schema import EmbeddingRequest
 
@@ -58,6 +63,7 @@ def get_student(student_id: int):
 async def startup_event():
     load_model()
     initialize_knowledge_base()
+    load_llm()
 
 
 @app.post("/embedding")
@@ -73,11 +79,15 @@ def get_embedding(request: EmbeddingRequest):
 def ask(request: EmbeddingRequest):
     try:
         result = find_most_similar(request.text)
+        context = result["answer"]
+        similarity_score = result["similarity_score"]
+        llm_answer = generate_answer(context, request.text)
     
         return {
         "question" : request.text,
-        "answer" : result["answer"],
-        "similarity_score" : result["similarity_score"]
+        "retrieved_context" : context,
+        "generated_answer" : llm_answer,
+        "similarity_score" : similarity_score
         }
 
     except Exception as e:
