@@ -6,7 +6,7 @@ def load_llm():
 
     if generator is None:
         print("loading LLM..")
-        generator = pipeline("text2text-generation", model="google/flan-t5-base")
+        generator = pipeline("text-generation", model="google/flan-t5-base",framework="pt")
         print("LLM loaded successfully")
 
 def generate_answer(context,question):
